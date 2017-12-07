@@ -100,7 +100,7 @@ function getLargeImage(item) { return "https://m.media-amazon.com/images/G/01/mo
 //TODO: Replace this data with your own.
 //=========================================================================================================================================
 const data = [
-                { word: "anyword", define: 'This is a lie! Everything you have been told about the cake is a lie, do not listen.'}
+                { word: 'anyword', define: 'This is a lie! Everything you have been told about the cake is a lie, do not listen.'}
             ];
 
 //=========================================================================================================================================
@@ -157,7 +157,7 @@ const startHandlers = Alexa.CreateStateHandler(states.START,{
             define: urbanResponse.definition,
             example: sanitizedExmaple
           };
-          data.push(responseObject);  
+          data.push(responseObject);
 
 
         if (item && item[Object.getOwnPropertyNames(data[0])[0]] != undefined)
