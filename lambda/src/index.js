@@ -1,8 +1,9 @@
 'use strict';
 const Alexa = require('alexa-sdk');
 let request = require('request');
-let baseUrl = "https://api.urbandictionary.com/v0/define?";
+let baseUrl = "https://api.urbandictionary.com/v0/define?term=";
 var responseObject;
+var urbanResponse;
 
 //=========================================================================================================================================
 //TODO: The items below this comment need your attention
@@ -99,8 +100,13 @@ function getLargeImage(item) { return "https://m.media-amazon.com/images/G/01/mo
 //=========================================================================================================================================
 //TODO: Replace this data with your own.
 //=========================================================================================================================================
+<<<<<<< HEAD
 const data = [
                 { word: 'anyword', define: 'This is a lie! Everything you have been told about the cake is a lie, do not listen.'}
+=======
+var data = [
+                { word: "anyword", define: 'This is a lie! Everything you have been told about the cake is a lie, do not listen.'}
+>>>>>>> c2c59c831bb1e49c8dc03f4f1d0d79d4c95cc3f3
             ];
 
 //=========================================================================================================================================
@@ -144,19 +150,24 @@ const startHandlers = Alexa.CreateStateHandler(states.START,{
     },
     "AnswerIntent": function() {
         let item = getItem(this.event.request.intent.slots);
-        let urbanResponse;
+        console.log("this is the"+item);
+        let requestVar=JSON.stringify(item);
+        console.log("this is the requestVar"+requestVar);
+
         let options = {
-          url: `${baseUrl}term=${item}`,
+          url: baseUrl+item,
           dataType: 'json'
           };
-        request(options, function (error, response, body) {
+        console.log("the options"+JSON.stringify(options));
+        request(options,  (error, responz, body) => {
           urbanResponse = JSON.parse(body).list[0];
-          let sanitizedExmaple = urbanResponse.example.replace(/\r?\n|\r/g, '');
+          console.log("this is the response"+ JSON.stringify(responz)+ "and this is the body" +body);
+          // let sanitizedExmaple = urbanResponse.example.replace(/\r?\n|\r/g, '');
           responseObject = {
             word: urbanResponse.word,
             define: urbanResponse.definition,
-            example: sanitizedExmaple
           };
+<<<<<<< HEAD
           data.push(responseObject);
 
 
@@ -166,21 +177,18 @@ const startHandlers = Alexa.CreateStateHandler(states.START,{
             if (USE_CARDS_FLAG)
             {
                 let imageObj = {smallImageUrl: getSmallImage(item), largeImageUrl: getLargeImage(item)};
+=======
+          console.log("the responseObject"+responseObject);
+>>>>>>> c2c59c831bb1e49c8dc03f4f1d0d79d4c95cc3f3
 
-                this.response.speak(getSpeechDescription(item)).listen(REPROMPT_SPEECH);
-                this.response.cardRenderer(getCardTitle(item), getTextDescription(item), imageObj);            }
-            else
-            {
-                this.response.speak(getSpeechDescription(item)).listen(REPROMPT_SPEECH);
-            }
-        }
-        else
-        {
-            this.response.speak(getBadAnswer(item)).listen(getBadAnswer(item));
+          data.push(responseObject);
+          console.log(this);
+          // if(item){
+          this.response.speak(responseObject.define);
+          this.emit(":responseReady");
+        });
 
-        }
 
-        this.emit(":responseReady");
     },
     "QuizIntent": function() {
         this.handler.state = states.QUIZ;
